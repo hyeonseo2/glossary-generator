@@ -1,0 +1,14 @@
+.venv/
+.venv_uv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+out/
+out_glossary.json
+out_glossary.csv
+site/
+
+.env
+.DS_Store

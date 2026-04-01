@@ -1,0 +1,12 @@
+.venv
+.venv_uv
+__pycache__
+*.pyc
+.git
+.gitignore
+.github
+.pyc
+node_modules
+.env
+.env.local
+tests

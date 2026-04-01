@@ -1,0 +1,7 @@
+.venv
+.venv_uv
+__pycache__
+*.pyc
+.git
+.github
+.tmp

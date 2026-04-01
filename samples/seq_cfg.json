@@ -1,0 +1,1 @@
+{"topk": 50, "max_ko_ngram": 3, "para_align_threshold": 0.2, "sent_align_threshold": 0.15}
