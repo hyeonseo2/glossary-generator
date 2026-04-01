@@ -1,63 +1,37 @@
-# Translation Glossary Generator (EN ↔ KO)
+# 📘 Translation Glossary Generator (EN ↔ KO)
 
-A bilingual terminology extraction project that builds high-quality English–Korean glossaries from parallel documentation.
+A bilingual terminology extraction pipeline that builds high-quality English–Korean glossaries from parallel documentation.
 
-It is designed for teams that maintain docs, manuals, product guides, or knowledge bases in both languages and want a repeatable way to generate a reusable term bank.
-
----
-
-## What this project does
-
-Given matched files from:
-
-- `samples/en` (English source)
-- `samples/ko` (Korean translation)
-
-it automatically:
-
-1. Aligns EN/KO paragraphs and sentences
-2. Extracts candidate English terms
-3. Generates Korean term candidates
-4. Scores candidate pairs with multilingual signals
-5. Aggregates evidence across documents
-6. Outputs a canonical glossary in JSON/CSV
+Designed for teams maintaining multilingual documentation (docs, manuals, product guides), this project provides a **repeatable and corpus-aware approach** to generate and maintain a reusable terminology database.
 
 ---
 
-## Core strengths
+## ✨ Features
 
-- **Corpus-aware extraction**: terms are selected with cross-document evidence, not one-shot matching
-- **Alignment-first design**: paragraph/sentence alignment improves term pairing quality
-- **Deterministic + ML hybrid scoring**: combines embeddings, context, transliteration, position, and alignment
-- **Web-first operation**: run extraction from a browser with progress tracking
-- **Static publishing ready**: publish glossary snapshots to GitHub Pages
+* **Alignment-first pipeline**
 
----
+  * Paragraph and sentence alignment improves term pairing accuracy
+* **Corpus-aware extraction**
 
-## Project structure
+  * Terms are selected based on cross-document evidence
+* **Hybrid scoring system**
 
-```text
-.
-├── glossary_pipeline/
-│   ├── cli.py                # CLI entrypoint
-│   ├── web.py                # Web server (/run-all, /output/*)
-│   ├── pipeline.py           # End-to-end orchestration
-│   ├── alignment.py          # EN/KO paragraph/sentence alignment
-│   ├── term_extraction.py    # English term extraction
-│   ├── korean_candidates.py  # Korean candidate generation
-│   ├── scoring.py            # Pair scoring
-│   └── voting.py             # Evidence aggregation / canonical selection
-├── samples/
-│   ├── en/                   # English files
-│   ├── ko/                   # Korean files
-│   └── pairs_*.json          # Input pair manifests
-├── out/                      # Outputs
-├── scripts/build_pages.py    # GitHub Pages static site builder
-```
+  * Combines embeddings, alignment signals, transliteration, and positional features
+* **Deterministic + ML approach**
+
+  * Reduces randomness while leveraging semantic similarity
+* **Web + CLI support**
+
+  * Run locally or via browser UI
+* **Static publishing ready**
+
+  * Easily deploy glossary snapshots to GitHub Pages
 
 ---
 
-## Local setup
+## 🚀 Quick Start
+
+### 1. Install
 
 ```bash
 python -m venv .venv
@@ -66,32 +40,87 @@ pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 ```
 
----
-
-## Run with CLI
+### 2. Run (CLI)
 
 ```bash
 python -m glossary_pipeline.cli \
   --input samples/pairs_long.json \
   --strict \
-  --out-json out/web/all_glossary.json \
-  --out-csv out/web/all_glossary.csv
+  --out-json out/all_glossary.json \
+  --out-csv out/all_glossary.csv
 ```
-
-Output fields:
-
-- `en_term`
-- `ko_term`
-- `confidence`
-- `score`
-- `evidence_count`
-- `support_ratio`
-- `example_en`
-- `example_ko`
 
 ---
 
-## Web app
+## 📦 Input Format
+
+Provide paired bilingual documents:
+
+```
+samples/
+├── en/
+├── ko/
+└── pairs_*.json
+```
+
+Example (`pairs_long.json`):
+
+```json
+[
+  {
+    "en": "file1.md",
+    "ko": "file1.md"
+  }
+]
+```
+
+---
+
+## 📤 Output
+
+Generated glossary includes:
+
+| Field          | Description            |
+| -------------- | ---------------------- |
+| en_term        | Extracted English term |
+| ko_term        | Matched Korean term    |
+| confidence     | Confidence level       |
+| score          | Scoring metric         |
+| evidence_count | Supporting occurrences |
+| support_ratio  | Cross-document support |
+| example_en     | Example sentence (EN)  |
+| example_ko     | Example sentence (KO)  |
+
+---
+
+## 🧠 How It Works
+
+Pipeline stages:
+
+1. **Alignment**
+
+   * EN/KO paragraph & sentence matching
+2. **Term Extraction**
+
+   * Candidate English terms (noun phrases, keywords)
+3. **Candidate Generation**
+
+   * Korean equivalents via alignment + heuristics
+4. **Scoring**
+
+   * Embedding similarity
+   * Context overlap
+   * Transliteration matching
+5. **Aggregation**
+
+   * Evidence-based voting across documents
+6. **Canonical Selection**
+
+   * Final glossary construction
+
+---
+
+## 🌐 Web Interface
 
 Run locally:
 
@@ -99,22 +128,24 @@ Run locally:
 python -m glossary_pipeline.web --host 0.0.0.0 --port 8080
 ```
 
-Main routes:
+Endpoints:
 
-- `/` — dashboard + run button + results preview
-- `/run-all` — batch extraction (POST)
-- `/output/<file>` — output download
-- `/output/<file>?view=table` — table view
-- `/api/pairs` — matched input pairs API
+* `/` — dashboard
+* `/run-all` — run pipeline
+* `/output/<file>` — download results
+* `/output/<file>?view=table` — table view
+* `/api/pairs` — input pairs API
 
-Language support:
+Language:
 
-- English default: `/?lang=en` (or `/`)
-- Korean: `/?lang=ko`
+* English: `/`
+* Korean: `/?lang=ko`
 
 ---
 
-## Cloud Run deployment
+## ☁️ Deployment
+
+### Cloud Run
 
 ```bash
 gcloud run deploy en-ko-glossary \
@@ -126,47 +157,48 @@ gcloud run deploy en-ko-glossary \
 
 ---
 
-## Publish to GitHub Pages (manual)
+## 📄 GitHub Pages
 
-Build static page assets:
+Build static site:
 
 ```bash
 python scripts/build_pages.py
 ```
 
-Then publish `site/` to GitHub Pages using your preferred method:
+Publish `site/` to GitHub Pages:
 
-- push `site/` to a Pages branch (e.g., `gh-pages`), or
-- use GitHub UI/Actions later if you decide to automate.
+```
+https://<your-id>.github.io/<repo>/
+```
+
+Includes:
+
+* glossary table
+* JSON / CSV download
 
 ---
 
-## GitHub Pages output
-
-`site/index.html` is generated from the latest batch and includes:
-
-- latest glossary table
-- JSON download (`site/data/latest.json`)
-- CSV download (`site/data/latest.csv`)
-
-After publishing the `site/` folder to Pages, your URL will look like:
+## 📁 Project Structure
 
 ```text
-https://<your-github-id>.github.io/<repo-name>/
+glossary_pipeline/
+├── cli.py
+├── web.py
+├── pipeline.py
+├── alignment.py
+├── term_extraction.py
+├── korean_candidates.py
+├── scoring.py
+└── voting.py
 ```
 
 ---
 
-## Suggested data operation flow
+## 🔄 Recommended Workflow
 
-1. Add/update bilingual source docs in `samples/en`, `samples/ko`
-2. Keep pair manifest (`samples/pairs_long.json`) current
-3. Run extraction (web or CLI)
-4. Review outputs in table/JSON/CSV
-5. Publish daily snapshots via GitHub Pages
+1. Add/update documents (`samples/en`, `samples/ko`)
+2. Update pair manifest
+3. Run pipeline
+4. Review glossary
+5. Publish snapshot
 
----
-
-## License
-
-Choose and add your preferred license (MIT/Apache-2.0/etc.).
